@@ -1,0 +1,110 @@
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+
+export function NoteRandomizer() {
+  const [string, setString] = useState("");
+  const [fret, setFret] = useState<number | null>(null);
+  const [note, setNote] = useState("");
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data: any) => {
+    console.log(data);
+    setString(getRandomArrayItem(data.strings));
+    setFret(getRandomIntInclusive(0, 12));
+    setNote(getRandomNote());
+  };
+
+  return (
+    <div>
+      <h1>Note Randomizer</h1>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h2>Strings to include</h2>
+        <div>
+          <input
+            type="checkbox"
+            id="strings_1"
+            name="strings"
+            value="1"
+            ref={register}
+          />
+          <label htmlFor="strings_1">1</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="strings_2"
+            name="strings"
+            value="2"
+            ref={register}
+          />
+          <label htmlFor="strings_2">2</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="strings_3"
+            name="strings"
+            value="3"
+            ref={register}
+          />
+          <label htmlFor="strings_3">3</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="strings_4"
+            name="strings"
+            value="4"
+            ref={register}
+          />
+          <label htmlFor="strings_4">4</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="strings_5"
+            name="strings"
+            value="5"
+            ref={register}
+          />
+          <label htmlFor="strings_5">5</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="strings_6"
+            name="strings"
+            value="6"
+            ref={register}
+          />
+          <label htmlFor="strings_6">6</label>
+        </div>
+
+        <input type="submit" value="Show random note" />
+      </form>
+
+      <br />
+
+      <div>
+        <div>String - {string}</div>
+        <div>Fret - {fret}</div>
+        <div>Note - {note}</div>
+      </div>
+    </div>
+  );
+}
+
+function getRandomNote() {
+  const notes = ["C", "D", "E", "F", "G", "A", "B"];
+  return getRandomArrayItem(notes);
+}
+
+function getRandomIntInclusive(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+}
+
+function getRandomArrayItem<A>(arr: A[]) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
