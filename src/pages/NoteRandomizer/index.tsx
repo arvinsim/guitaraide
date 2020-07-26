@@ -3,13 +3,10 @@ import { useForm } from "react-hook-form";
 
 export function NoteRandomizer() {
   const [string, setString] = useState("");
-  const [fret, setFret] = useState<number | null>(null);
   const [note, setNote] = useState("");
   const { register, handleSubmit } = useForm();
   const onSubmit = (data: any) => {
-    console.log(data);
     setString(getRandomArrayItem(data.strings));
-    setFret(getRandomIntInclusive(0, 12));
     setNote(getRandomNote());
   };
 
@@ -87,7 +84,6 @@ export function NoteRandomizer() {
 
       <div>
         <div>String - {string}</div>
-        <div>Fret - {fret}</div>
         <div>Note - {note}</div>
       </div>
     </div>
@@ -97,12 +93,6 @@ export function NoteRandomizer() {
 function getRandomNote() {
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   return getRandomArrayItem(notes);
-}
-
-function getRandomIntInclusive(min: number, max: number) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
 function getRandomArrayItem<A>(arr: A[]) {
