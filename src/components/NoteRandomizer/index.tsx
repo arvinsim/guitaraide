@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { getRandomArrayItem, getRandomNote } from "../../utils";
 
 export function NoteRandomizer() {
   const [string, setString] = useState("");
@@ -13,7 +14,6 @@ export function NoteRandomizer() {
   return (
     <div>
       <h1>Note Randomizer</h1>
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Strings to include</h2>
         <div>
@@ -88,13 +88,4 @@ export function NoteRandomizer() {
       </div>
     </div>
   );
-}
-
-function getRandomNote() {
-  const notes = ["C", "D", "E", "F", "G", "A", "B"];
-  return getRandomArrayItem(notes);
-}
-
-function getRandomArrayItem<A>(arr: A[]) {
-  return arr[Math.floor(Math.random() * arr.length)];
 }
