@@ -4,7 +4,7 @@ An app to help me learn the guitar
 
 ## Features
 
-- Note Referenc
+- Note Reference
 - Note randomizer
 - Note generator
 
