@@ -10,5 +10,7 @@ An app to help me learn the guitar
 
 ## TODO
 
+- [] Use [JTab](https://jtab.tardate.com) to output guitar tab notation
 - [] Port over to ViteJS
 - [] Use a UI framework
+
