@@ -1,18 +1,20 @@
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
+import {draw} from 'vexchords';
+
 import {getRandomArrayItem, getRandomNote} from "../../utils";
 
 export function NoteRandomizer() {
+    const EL_ID = 'note-randomizer-output'
     const [stringNumber, setStringNumber] = useState("");
     const [note, setNote] = useState("");
-    const [jtabOutput, setJTabOutput] = useState("")
     const {register, handleSubmit} = useForm();
     const onSubmit = (data: { strings: Array<string> }) => {
         const randomStringNumber = getRandomArrayItem(data.strings)
         const randomNote = getRandomNote()
         setStringNumber(randomStringNumber);
         setNote(randomNote);
-        setJTabOutput(getjTabOutput(randomStringNumber, randomNote))
+        draw(`#${EL_ID}`, getChordConfig(randomStringNumber, randomNote));
     };
 
     return (
@@ -80,13 +82,13 @@ export function NoteRandomizer() {
             <div>
                 <div>String - {stringNumber}</div>
                 <div>Note - {note}</div>
-                <div className="jtab">{jtabOutput}</div>
+                <div id={EL_ID}/>
             </div>
         </div>
     );
 }
 
-function getjTabOutput(stringNumber: string, note: string) {
+function getChordConfig(stringNumber: string, note: string) {
     const stringMappings: Record<string, Array<string>> = {
         '1': ['E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E'],
         '2': ['B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
@@ -95,17 +97,23 @@ function getjTabOutput(stringNumber: string, note: string) {
         '5': ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A',],
         '6': ['E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E'],
     }
-
-    const fret = stringMappings[stringNumber].indexOf(note)
-    let output= new Map<string, string>()
-    output.set('6', 'X/X')
-    output.set('5', 'X/X')
-    output.set('4', 'X/X')
-    output.set('3', 'X/X')
-    output.set('2', 'X/X')
-    output.set('1', 'X/X')
-    output.set(stringNumber, `${fret}/1`)
-    return '%' + Object.entries(output).map(([key, value]) => {
-        return value
-    }).join('.')
+    const fret = stringMappings[stringNumber].indexOf(note) + 1
+    const chord: Array<[number, number | string, number?]> = [
+        [1, 'x'],
+        [2, 'x'],
+        [3, 'x'],
+        [4, 'x'],
+        [5, 'x'],
+        [6, 'x'],
+    ]
+    const itemToFind: [number, number | string, number?] = [parseInt(stringNumber, 10), 'x']
+    const i = chord.findIndex(item => {
+        return JSON.stringify(item) === JSON.stringify(itemToFind)
+    });
+    chord[i] = [Number(stringNumber), fret, 1]
+    const chordConfig: { chord: object, position?: number} = { chord }
+    if (fret > 5) {
+        chordConfig.position = fret - 3
+    }
+    return chordConfig
 }
