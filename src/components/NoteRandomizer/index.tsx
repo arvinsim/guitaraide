@@ -3,12 +3,16 @@ import {useForm} from "react-hook-form";
 import {getRandomArrayItem, getRandomNote} from "../../utils";
 
 export function NoteRandomizer() {
-    const [string, setString] = useState("");
+    const [stringNumber, setStringNumber] = useState("");
     const [note, setNote] = useState("");
-    const {register, handleSubmit, formState: {errors}} = useForm();
-    const onSubmit = (data: any) => {
-        setString(getRandomArrayItem(data.strings));
-        setNote(getRandomNote());
+    const [jtabOutput, setJTabOutput] = useState("")
+    const {register, handleSubmit} = useForm();
+    const onSubmit = (data: { strings: Array<string> }) => {
+        const randomStringNumber = getRandomArrayItem(data.strings)
+        const randomNote = getRandomNote()
+        setStringNumber(randomStringNumber);
+        setNote(randomNote);
+        setJTabOutput(getjTabOutput(randomStringNumber, randomNote))
     };
 
     return (
@@ -70,16 +74,38 @@ export function NoteRandomizer() {
                     />
                     <label htmlFor="strings_6">6</label>
                 </div>
-
                 <input type="submit" value="Show random note"/>
             </form>
-
             <br/>
-
             <div>
-                <div>String - {string}</div>
+                <div>String - {stringNumber}</div>
                 <div>Note - {note}</div>
+                <div className="jtab">{jtabOutput}</div>
             </div>
         </div>
     );
+}
+
+function getjTabOutput(stringNumber: string, note: string) {
+    const stringMappings: Record<string, Array<string>> = {
+        '1': ['E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E'],
+        '2': ['B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
+        '3': ['G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G',],
+        '4': ['D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D',],
+        '5': ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A',],
+        '6': ['E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E'],
+    }
+
+    const fret = stringMappings[stringNumber].indexOf(note)
+    let output= new Map<string, string>()
+    output.set('6', 'X/X')
+    output.set('5', 'X/X')
+    output.set('4', 'X/X')
+    output.set('3', 'X/X')
+    output.set('2', 'X/X')
+    output.set('1', 'X/X')
+    output.set(stringNumber, `${fret}/1`)
+    return '%' + Object.entries(output).map(([key, value]) => {
+        return value
+    }).join('.')
 }
