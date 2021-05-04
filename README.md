@@ -10,7 +10,8 @@ An app to help me learn the guitar
 
 ## TODO
 
-- [] Use JS chord library to show illustration
+- [x] Use JS chord library, [vexchords](https://github.com/0xfe/vexchords) to show illustration
+- [] Design website using Figma  
+- [] Use [audiosynth](https://keithwhor.github.io/audiosynth/) to play sound
 - [] Port over to ViteJS
-- [] Use a UI framework
 
